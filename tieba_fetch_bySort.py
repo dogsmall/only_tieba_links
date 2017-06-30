@@ -138,12 +138,12 @@ def fetch_bySort(pool,db1,db2):
                 _thread=threading.Thread(target=parserAndStorage_items, args=(items,pool,db))
                 _threads.append(_thread)
                 _thread.start()
-                time.sleep(3)
+                #time.sleep(3)
             if len(_threads):
                 for i in _threads:
-                    i.join(5)
+                    i.join()
             print('tieba link has caught!')
-            parserAndStorage_thread.join(5)
+            parserAndStorage_thread.join()
             db.client.close()
         except:
             traceback.print_exc()

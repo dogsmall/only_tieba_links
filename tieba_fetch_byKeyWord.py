@@ -83,8 +83,8 @@ def fetch_byKeyWord(pool,db1,db2):
                 tags_parser_thread=threading.Thread(target=tags_parser, args=(tags,pool,db))
                 tags_parser_thread.start()
                 #time.sleep(3)
-                tags_parser_thread.join(5)
+                tags_parser_thread.join()
                 print('tieba link has caught!')
-            db.client.close()
+            #db.client.close()
         except:
             traceback.print_exc()
