@@ -64,10 +64,10 @@ def fetch_byKeyWord(pool,db1,db2):
         try:       
             if db1.client.is_primary :
                 db=db1
-                db2.client.close()
+                #db2.client.close()
             elif db2.client.is_primary :
                 db = db2
-                db1.client.close()
+                #db1.client.close()
             word=getKeyWord(rcli)
             print('Have to get the keyword,Start fetching posted links!')
             url='http://tieba.baidu.com/f/search/fm?ie=UTF-8&qw='+word+'&rn=1'
