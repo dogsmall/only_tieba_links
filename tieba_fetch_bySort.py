@@ -112,10 +112,10 @@ def fetch_bySort(pool,db1,db2):
         try:
             if db1.client.is_primary :
                 db=db1
-                db2.client.close()
+                #db2.client.close()
             elif db2.client.is_primary :
                 db = db2
-                db1.client.close()       
+                #db1.client.close()       
             url = rcli.brpoplpush('tiebaSortUrl_list','tiebaSortUrl_list',0).decode()
             res=requests.get(url,timeout=15)
             bs=BeautifulSoup(res.content.decode('utf-8'), 'html.parser')
@@ -144,7 +144,7 @@ def fetch_bySort(pool,db1,db2):
                     i.join()
             print('tieba link has caught!')
             parserAndStorage_thread.join()
-            db.client.close()
+            #db.client.close()
         except:
             traceback.print_exc()
 
