@@ -58,10 +58,12 @@ def tags_parser(tags,pool,db):
     except:
         traceback.print_exc()
 
-def fetch_byKeyWord(pool,db1,db2):
+def fetch_byKeyWord(pool,mcli,mcli2):
     rcli = redis.StrictRedis(connection_pool=pool)
     while True:
-        try:       
+        try:
+            db1=mcli.get_database('baidutieba')
+            db2=mcli2.get_database('baidutieba')
             if db1.client.is_primary :
                 db=db1
                 db2.client.close()
@@ -83,7 +85,7 @@ def fetch_byKeyWord(pool,db1,db2):
                 tags_parser_thread=threading.Thread(target=tags_parser, args=(tags,pool,db))
                 tags_parser_thread.start()
                 #time.sleep(3)
-                tags_parser_thread.join(5)
+                tags_parser_thread.join()
                 print('tieba link has caught!')
             db.client.close()
         except:

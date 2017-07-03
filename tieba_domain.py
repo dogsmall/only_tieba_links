@@ -12,10 +12,10 @@ import tieba_fetch_byKeyWord
 import tieba_fetch_bySort
 
 
-def all_fetcher_thread(rpool, db1,db2,es):
+def all_fetcher_thread(rpool, mcli,mcli2,es):
     for i in range(3):
-        t1=threading.Thread(target=tieba_fetch_bySort.fetch_bySort,args=(rpool, db1,db2))
-        t2=threading.Thread(target=tieba_fetch_byKeyWord.fetch_byKeyWord,args=(rpool, db1,db2))
+        t1=threading.Thread(target=tieba_fetch_bySort.fetch_bySort,args=(rpool, mcli,mcli2))
+        t2=threading.Thread(target=tieba_fetch_byKeyWord.fetch_byKeyWord,args=(rpool, mcli,mcli2))
         t1.start()
         t2.start()
 
@@ -68,9 +68,9 @@ def do_main():
     #mcli2 = MongoClient('127.0.0.1', 27017)
     mcli = MongoClient(mon_url)
     mcli2 = MongoClient(mon_url2)
-    db1 = mcli.get_database('baidutieba')
-    db2 = mcli2.get_database('baidutieba')
-    working_thread = threading.Thread(target=all_fetcher_thread, args=(rpool, db1,db2,es))
+    #db1 = mcli.get_database('baidutieba')
+    #db2 = mcli2.get_database('baidutieba')
+    working_thread = threading.Thread(target=all_fetcher_thread, args=(rpool, mcli,mcli2,es))
     working_thread.start()
     print('Tieba crawlers start to work!')
     working_thread.join()

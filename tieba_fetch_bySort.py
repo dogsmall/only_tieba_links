@@ -103,13 +103,15 @@ def parserAndStorage_items(items,pool,db):
     
     
 
-def fetch_bySort(pool,db1,db2):
+def fetch_bySort(pool,mcli,mcli2):
     rcli = redis.StrictRedis(connection_pool=pool)
     if not rcli.llen('tiebaSortUrl_list'):
         tiebaSort_fetch(pool)
         print('Classification link has caught!')
     while True:
         try:
+            db1=mcli.get_database('baidutieba')
+            db2=mcli2.get_database('baidutieba')
             if db1.client.is_primary :
                 db=db1
                 db2.client.close()
@@ -138,12 +140,12 @@ def fetch_bySort(pool,db1,db2):
                 _thread=threading.Thread(target=parserAndStorage_items, args=(items,pool,db))
                 _threads.append(_thread)
                 _thread.start()
-                time.sleep(3)
+                #time.sleep(3)
             if len(_threads):
                 for i in _threads:
-                    i.join(5)
+                    i.join()
             print('tieba link has caught!')
-            parserAndStorage_thread.join(5)
+            parserAndStorage_thread.join()
             db.client.close()
         except:
             traceback.print_exc()
