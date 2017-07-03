@@ -20,8 +20,11 @@ def eliminate_repetition_intoRedis(rcli):
         try:
             if not rcli.llen('tieba_url_cache'):
                 break
-            item=eval(rcli.rpop('tieba_url_cache').decode())
-            count+=1
+            _item=rcli.rpop('tieba_url_cache')
+            if _item==None:
+                continue
+            count+=1          
+            item=eval(_item.decode())
             if item and len(item.keys()):
                 if not rcli.sismember('tieba_url_set', item):
                         with rcli.pipeline() as pipe:
