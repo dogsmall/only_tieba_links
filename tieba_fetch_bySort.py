@@ -53,7 +53,7 @@ def tiebaSort_fetch(pool):
 
 def supplement(url):
     try:
-        res=requests.get(url,timeout=15)
+        res=requests.get(url.strip(),timeout=15)
         try:
             bs=BeautifulSoup(res.content.decode('utf-8'), 'html.parser')
         except UnicodeDecodeError:
@@ -82,14 +82,14 @@ def parserAndStorage_items(items,pool,db):
             ba_m_num=ba_m[0].text.strip() if len(ba_m) else ''
             ba_p_num=ba_p[0].text.strip() if len(ba_p) else ''
             if ba_name=='' or ba_m_num=='' or ba_m_num is None or ba_p_num=='' or ba_p_num is None:
-                _num=supplement('http://tieba.baidu.com'+item.get('href'))
+                _num=supplement('http://tieba.baidu.com'+item.get('href').strip())
                 if _num:
                     ba_m_num=_num['ba_m_num']
                     ba_p_num=_num['ba_p_num']
                     ba_name=_num['ba_name']
             tieba={
                 '_id':ba_name,
-                'ba_url':'http://tieba.baidu.com'+item.get('href'),
+                'ba_url':'http://tieba.baidu.com'+item.get('href').strip(),
                 'ba_m_num':int(ba_m_num) if ba_m_num.isdecimal() else 0,
                 'ba_p_num':int(ba_p_num) if ba_p_num.isdecimal() else 0
             }
@@ -119,7 +119,7 @@ def fetch_bySort(pool,mcli,mcli2):
                 db = db2
                 db1.client.close()       
             url = rcli.brpoplpush('tiebaSortUrl_list','tiebaSortUrl_list',0).decode()
-            res=requests.get(url,timeout=15)
+            res=requests.get(url.strip(),timeout=15)
             bs=BeautifulSoup(res.content.decode('utf-8'), 'html.parser')
             items=bs.select('#ba_list .ba_info a[target=_blank]')
             parserAndStorage_thread=threading.Thread(target=parserAndStorage_items, args=(items,pool,db))
@@ -132,7 +132,7 @@ def fetch_bySort(pool,mcli,mcli2):
             pnum=2
             _threads=[]
             while pnum<=max_pnum:
-                url_p=url+'&pn='+str(pnum)
+                url_p=url.strip()+'&pn='+str(pnum)
                 res=requests.get(url_p,timeout=15)
                 bs=BeautifulSoup(res.content.decode('utf-8'), 'html.parser')
                 items=bs.select('#ba_list .ba_info a[target=_blank]')
